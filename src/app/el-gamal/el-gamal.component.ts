@@ -27,23 +27,7 @@ export class ElGamalComponent implements OnInit {
 
   ngOnInit(){
     this.isKeyGenerated=false;
-
-// this is gama
- console.log(this.expmod(2,1520, 2357) + " Gama")
- console.log(this.expmod(1185,1520, 2357))
-
- //this is delta
- console.log(((this.expmod(1185,1520, 2357))*2035)%2357)
-//  console.log(this.expmod(1430,605, 2357))
- console.log((872*697)%2357)
-
- console.log(1520%2357 + "test")
-//  console.log(Math.pow(2, 4))
-//  console.log(this.expmod(1430,605, 2357))
-//  s=power(h,k,q)
-//  p=power(g,k,q)
-// console.log(this.countPrimitiveRoots(7))
- console.log(this.alpahpowofA)
+    
   }
   gcd_two_numbers(x:number,y:number) {
     if ((typeof x !== 'number') || (typeof y !== 'number'))
