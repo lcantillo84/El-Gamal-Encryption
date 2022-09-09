@@ -1,0 +1,168 @@
+
+
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta name="description" content="A online ElGamal encryption/decryption tool. This tool will help you understand how ElGamal encryption works.">
+    <title>ElGamal Encryption Playground</title>
+    <link rel="canonical" href="https://www.debjitbiswas.com/elgamal/" />
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/contrib/auto-render.min.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand text-center" href="#">ElGamal Encryption</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+    </nav>
+
+    <div id="wrapper" class="container clearfix" style="padding-top:80px;">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="panel panel-default machine clearfix" id="aliceMachine">
+            <div class="panel-heading"><h3 class="panel-title">Alice's Machine</h3></div>
+            <div class="panel-body main">
+              <ul class="errors"></ul>
+
+                <div class="form-group" id="prime">
+                  <label for="txtPrime"  matTooltip="Enter a prime number">
+                    Enter a prime : (p)
+                  </label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="txtPrime"   [(ngModel)]="primeNumber" />
+                    <div class="input-group-btn">
+                      <button  class="btn btn-default helpers" type="button" (click)="isPrime(primeNumber)"  matTooltip="Enter a prime number"
+                      matTooltipPosition="right">Check if is prime</button>
+                    </div>
+                  </div>
+                  <span *ngIf="isPrimeNumber==true">Is prime number</span>
+                  <span *ngIf="isPrimeNumber==false" class="errorInfo">Please enter a prime number</span>
+                </div>
+                <div class="form-group" id="generator">
+                  <label for="txtG" matTooltip="Primitive root of p will be a number such that when x goes from 1 to p-1 then g^x (mod p) goes through all the numbers in the set [1, 2,...,(p-1)] in some order"   matTooltipPosition="right">
+                    Choose (g)
+                    <span class="glyphicon glyphicon-info-sign" ></span>
+                  </label>
+                  <div id="generatorInfo"><button class="btn btn-xs btn-default" (click)="countPrimitiveRoots(primeNumber)">Find Generator</button> </div>
+                  <div id="selectG">Your generator is = {{alpha}}</div>
+                </div>
+
+                <div class="form-group" id="privateKey">
+                  <label for="txtPrivateKey" matTooltip="A number greater than 0 and less than p - 1"    matTooltipPosition="right">
+                    Enter Private Key (x)
+                    <span class="glyphicon glyphicon-info-sign" title=""></span>
+                  </label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="txtPrivateKey" [(ngModel)]="randomKeyA"/>
+                    <div class="input-group-btn">
+                      <button id="getRandomPrivateKey" class="btn btn-default helpers" (click)="getRandomIntAlice(alpha,primeNumber)">Get Random Key</button>
+                    </div>
+                  </div>
+                </div>
+
+                <p>(h) is calculated as (h = g^x mod  p)</p>
+
+                <button id="getPublicKey" class="btn btn-success" (click)="expmod(alpha,randomKeyA,primeNumber)">
+                  Generate &amp; Publish Public Key  &nbsp;<span class="glyphicon glyphicon-arrow-right"></span>
+                </button>
+    <div class="panel panel-default" style="margin-top: 10px;">
+                <div class="panel-body">
+                  <div id="messageDisplay">
+                    <div class="inbox-empty" *ngIf="!messageBob">
+                      You have no messages.
+                    </div>
+                    <div class="inbox-has-message" *ngIf="messageBob">
+                      <div class="col-12 text-center">You received a message from Bob. <button id="decrypt" class="btn btn-primary btn-sm mt-2" type="button">Decrypt</button></div>
+                      <div class="data" style="font-weight: bold;margin-top:10px;"><strong>Bob's decrypted message: {{message}}</strong></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-default" style="margin-top: 10px;">
+                <div  *ngIf="messageBob" class="panel-body text-center">
+                  <p>
+                    Message is decrypted using
+
+                  </p>
+                  <p><strong>s=(c1 ^ p-1-x) mod p</strong></p>
+                  <p><strong>m=(c2 * s) mod p</strong></p>
+                  <p></p>
+                </div>
+              </div>
+
+              <div class="extrainfo"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div id="wire">
+            <div class="wire-data">
+              <div id="keyDisplay" class="display">
+                Alice's Public Key<br/>
+                <span *ngIf="isKeyGenerated" class="data"><strong>p:{{primeNumber}}</strong> - <strong>g:{{alpha}}</strong> - <strong>h:{{h}}</strong></span>
+              </div>
+
+              <div id="encryptedMsg" class="display">
+                Bob's encrypted message<br/>
+                <span class="data" *ngIf="messageBob"><strong>c1:{{this.gama}}</strong> - <strong>c2:{{this.delta}}</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="panel panel-default machine clearfix" id="bobMachine">
+            <div class="panel-heading"><h3 class="panel-title">Bob's Machine</h3></div>
+            <div class="panel-body main">
+              <form>
+                <div class="form-group" id="encryptPrivate" >
+                  <label for="txtEncryptPrivate" matTooltip="Should be greater than or equal to 0 and less than p - 1."    matTooltipPosition="right">
+                    Private Key for Encryption (r)
+                    <span class="glyphicon glyphicon-info-sign" ></span>
+                  </label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="txtEncryptPrivate" name="randomkeyB" [(ngModel)]="randomKeyB"/>
+                    <div class="input-group-btn">
+                      <button id="getRandomEncyptKey" class="btn btn-default helpers" (click)="getRandomIntBob(alpha, primeNumber)">Get Random Key</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group" id="message">
+                  <label for="txtMessage" matTooltip="Should be number greater than 0 and less than or equal to p.">
+                    Message (m)
+                    <!-- <span class="glyphicon glyphicon-info-sign" title="Should be greater than 0 and less than or equal to p."></span> -->
+                  </label>
+                  <input type="text" class="form-control" id="txtMessage"  name="message" [(ngModel)]="message"/>
+
+                </div>
+                <div class="col-12"> <p>Encrypted message is calculated as </p>
+                  <p>  (c1, c2) = (g^r  mod p, (h^r m) mod  p) )</p>
+                </div>
+                <button id="encrypt" class="btn btn-success" (click)="encryptSend()">
+                  <span class="glyphicon glyphicon-arrow-left" ></span>&nbsp; Encrypt &amp; Send
+                </button>
+
+              </form>
+              <div class="extrainfo"></div>
+            </div>
+          </div>
+          <div>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+      <footer class="footer clearfix">
+        <p class="pull-left">Copyright &copy; 2020 Lilianne Cantillo</p>
+      </footer>
+    </div>
+  </body>
+</html>

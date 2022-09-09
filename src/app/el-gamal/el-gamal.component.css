@@ -1,0 +1,81 @@
+/*
+#wrapper {
+  margin: 20px auto;
+}
+.machine h2 {
+  font-size: 100%;
+  margin: 0;
+}
+label {
+  display: block;
+}
+input {
+  border: 1px solid #AAA;
+}
+.error input {
+  border: 1px solid #FFAAAA;
+}
+.machine,
+#wire {
+}
+.machine {
+  border: 1px solid #AAAAFF;
+  padding: 10px;
+}
+.machine .main {
+  border-right: 1px solid #CCC;
+  float: left;
+  padding: 0 2%;
+  width: 45%;
+}
+.machine .extrainfo {
+  float: left;
+  padding: 0 2%;
+  width: 45%;
+}
+button.helpers {
+  background: none;
+  border: none;
+  text-decoration: underline;
+}
+.display {
+  border: 2px solid #888888;
+  border-radius: 4px 4px 4px 4px;
+  box-shadow: 0 1px 3px #888888;
+  font-weight: bold;
+  margin: 10px 0;
+  padding: 10px;
+}
+*/
+
+.errorInfo {
+  color: #FF6666;
+  /* display: none; */
+}
+.error .errorInfo {
+  display: block;
+}
+
+#wire {
+  background: url(../images/cloud.png) no-repeat center top;
+  height: 245px;
+}
+
+.wire-data {
+  padding-top: 70px;
+  text-align: center;
+}
+
+.display {
+  width: 60%;
+  margin: 10px auto 0;
+}
+
+#encryptedMsg {
+  border-top: 1px dashed #AAA;
+  padding-top: 8px;
+}
+
+.wire-data .data {
+  font-weight: bold;
+}
